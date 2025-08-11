@@ -2,8 +2,12 @@ from flask import Flask, render_template, request
 import google.generativeai as genai
 import os
 import PyPDF2
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
+api_key = os.getenv("google_api_key")
 #app
 app = Flask(__name__)
 
