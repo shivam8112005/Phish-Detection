@@ -23,12 +23,14 @@ def detect_scam():
 
     if file.filename.endswith('.pdf'):
         pdf_reader = PyPDF2.PdfReader(file)
-        pdf_text = " ".join([page.extract_text() for page in pdf_reader.pages if page.extract_text()])
+        extracted_text = " ".join([page.extract_text() for page in pdf_reader.pages if page.extract_text()])
 
     elif file.filename.endswith('.txt'):
         extracted_text = file.read().decode('utf-8')
     else:
-        return render_template('index.html', message='Error fetching the text! File is Empty or please Enter .pdf or .txt file only.')       
+        return render_template('index.html', message='Error fetching the text! File is Empty or please Enter .pdf or .txt file only.')  
+    print(extracted_text)
+    return render_template('index.html')
 
 #python main
 if  __name__ == '__main__':
