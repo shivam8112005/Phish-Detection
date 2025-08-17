@@ -148,8 +148,8 @@
         <p>{{ message }}</p>
         {% endif %}
 
-        <h2><i class="fas fa-link"></i> URL Threat Detection</h2>
-        <form method="post" action="/predict" onsubmit="showSpinner('urlForm', 'urlSpinner')">
+        <!-- <h2><i class="fas fa-link"></i> URL Threat Detection</h2>
+        <form method="post" action="/url_predict" onsubmit="showSpinner('urlForm', 'urlSpinner')">
             <label for="url">Enter URL:</label>
             <input type="text" name="url" required>
             <button type="submit"><i class="fas fa-search"></i> Classify</button>
@@ -161,7 +161,23 @@
                 <p><strong>URL:</strong> {{ input_url }}</p>
                 <p><strong>Predicted Class:</strong> {{ predicted_class }}</p>
             </div>
-        {% endif %}
+        {% endif %} -->
+
+            <h2><i class="fas fa-link"></i> URL Threat Detection</h2>
+<form id="urlForm" method="post" action="/url_predict" onsubmit="showSpinner('urlForm', 'urlSpinner')">
+    <label for="url">Enter URL:</label>
+    <input type="text" name="url" required>
+    <button type="submit"><i class="fas fa-search"></i> Classify</button>
+    <div id="urlSpinner" class="spinner"></div>
+</form>
+
+{% if url_result %}
+    <p><b>URL:</b> {{ url_entered }}</p>
+    <p><b>Prediction:</b> {{ url_result }}</p>
+{% endif %}
+
+
+
     </div>
 
 </body>
