@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}SMS Threat Detection - ThreatGuard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-sms"></i> SMS Threat Detection</h1>
+    <p>Intelligent SMS analysis to identify spam messages, smishing attacks, and fraudulent communications targeting mobile users.</p>
+</div>
+
+<div class="detection-page">
+    <div class="main-card">
+        <div class="card-header">
+            <h3><i class="fas fa-mobile-alt"></i> Analyze SMS Security</h3>
+            <p>Enter SMS message content to check for spam, smishing attempts, and fraudulent communications.</p>
+        </div>
+        
+        <form method="POST" action="/sms_predict" class="detection-form">
+            <div class="form-group">
+                <label for="message"><i class="fas fa-comment"></i> SMS Message Content</label>
+                <textarea id="message" name="message" class="form-control" rows="4" placeholder="Paste the SMS message content here..." required></textarea>
+                <small>Enter the complete text message you received</small>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-large">
+                <i class="fas fa-mobile-alt"></i> Analyze SMS Security
+            </button>
+        </form>
+        
+        {% if sms_result %}
+        <div class="result-section">
+            <div class="result {{ 'safe' if sms_result == 'Legitimate' else 'danger' }}">
+                <div class="result-header">
+                    <i class="fas fa-{{ 'check-circle' if sms_result == 'Legitimate' else 'exclamation-triangle' }}"></i>
+                    <h4>SMS Analysis Complete</h4>
+                </div>
+                <div class="result-content">
+                    <p><strong>Status:</strong> {{ sms_result }}</p>
+                    {% if sms_result == 'Legitimate' %}
+                    <p>This SMS message appears to be legitimate based on our analysis.</p>
+                    {% else %}
+                    <p>⚠️ This SMS has been flagged as potentially spam or fraudulent. Do not click any links or respond.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="info-sidebar">
+        <div class="info-card">
+            <h4><i class="fas fa-info-circle"></i> SMS Threats We Detect</h4>
+            <ul>
+                <li>Smishing (SMS phishing) attempts</li>
+                <li>Fraudulent prize notifications</li>
+                <li>Fake delivery notifications</li>
+                <li>Suspicious financial requests</li>
+            </ul>
+        </div>
+        
+        <div class="info-card">
+            <h4><i class="fas fa-shield-alt"></i> SMS Safety Tips</h4>
+            <ul>
+                <li>Don't click links from unknown numbers</li>
+                <li>Verify urgent requests independently</li>
+                <li>Never share personal info via SMS</li>
+                <li>Report suspicious messages</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

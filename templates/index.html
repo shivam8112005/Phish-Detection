@@ -1,184 +1,114 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Threat Detector</title>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #0d1117;
-            color: #ffffff;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
+{% extends "base.html" %}
 
-        /* Navbar */
-        .navbar {
-            width: 100%;
-            background: #161b22;
-            padding: 25px 0;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            position: fixed;
-            top: 0;
-            left: 0;
-        }
+{% block title %}ThreatGuard - Advanced Cybersecurity Protection{% endblock %}
 
-        .navbar h1 {
-            margin: 0;
-            font-size: 32px;
-            font-weight: bold;
-            color: #58a6ff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .container {
-            margin-top: 120px;
-            background: #1c2128;
-            padding: 40px;
-            border-radius: 12px;
-            width: 70%;
-            max-width: 800px;
-            text-align: center;
-        }
-
-        input {
-            width: 95%;
-            padding: 14px;
-            font-size: 18px;
-            border: 2px solid #58a6ff;
-            border-radius: 8px;
-            background-color: #22272e;
-            color: white;
-            margin-bottom: 15px;
-        }
-
-        button {
-            background-color: #238636;
-            color: white;
-            padding: 14px;
-            font-size: 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            border: none;
-        }
-
-        button:hover {
-            background-color: #2ea043;
-            transform: scale(1.05);
-        }
-
-        .scan-icon {
-            font-size: 20px;
-        }
-
-        /* Spinner */
-        .spinner {
-            display: none;
-            margin: 10px auto;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #3498db;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Result Styling */
-        .result-box {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 5px;
-            font-size: 18px;
-        }
-
-        .benign { color: #34D399; }
-        .defacement { color: #F59E0B; }
-        .malware { color: #EF4444; }
-        .phishing { color: #8B5CF6; }
-        .unknown { color: #ffffff; }
-    </style>
-
-    <script>
-        function showSpinner(formId, spinnerId) {
-            document.getElementById(spinnerId).style.display = 'block';
-            setTimeout(() => {
-                document.getElementById(spinnerId).style.display = 'none';
-            }, 3000);  // Simulating loading time
-        }
-    </script>
-</head>
-<body>
-
-    <div class="navbar">
-        <h1><i class="fas fa-shield-alt"></i> ThreatGuard</h1>
+{% block content %}
+<!-- Updated homepage to be more of a landing page with overview cards -->
+<section class="hero">
+    <h1><i class="fas fa-shield-alt"></i> ThreatGuard</h1>
+    <p>Enterprise-grade cybersecurity solutions powered by advanced AI. Protect your digital assets with comprehensive threat detection across all communication channels.</p>
+    <div class="hero-stats">
+        <div class="stat">
+            <h3>99.9%</h3>
+            <p>Threat Detection Rate</p>
+        </div>
+        <div class="stat">
+            <h3>1M+</h3>
+            <p>URLs Analyzed Daily</p>
+        </div>
+        <div class="stat">
+            <h3>24/7</h3>
+            <p>Real-time Protection</p>
+        </div>
     </div>
+</section>
 
-    <div class="container">
-        <h2><i class="fas fa-exclamation-triangle"></i> Malicious Files</h2>
-        <form action="/scam/" method="post" enctype="multipart/form-data" onsubmit="showSpinner('fileForm', 'fileSpinner')">
-            <label for="file"><strong>Upload a file (PDF/TXT only):</strong></label><br>
-            <input type="file" name="file" required><br>
-            <button type="submit"><i class="fas fa-upload scan-icon"></i> Analyze</button>
-            <div id="fileSpinner" class="spinner"></div>
-        </form>
-
-        {% if message %}
-        <h3>Result:</h3>
-        <p>{{ message }}</p>
-        {% endif %}
-
-        <!-- <h2><i class="fas fa-link"></i> URL Threat Detection</h2>
-        <form method="post" action="/url_predict" onsubmit="showSpinner('urlForm', 'urlSpinner')">
-            <label for="url">Enter URL:</label>
-            <input type="text" name="url" required>
-            <button type="submit"><i class="fas fa-search"></i> Classify</button>
-            <div id="urlSpinner" class="spinner"></div>
-        </form>
-
-        {% if predicted_class %}
-            <div class="result-box {{ predicted_class.lower() }}">
-                <p><strong>URL:</strong> {{ input_url }}</p>
-                <p><strong>Predicted Class:</strong> {{ predicted_class }}</p>
+<!-- Converted to overview cards that link to separate pages -->
+<div class="services-overview">
+    <h2>Comprehensive Security Solutions</h2>
+    <div class="cards-grid">
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="fas fa-link"></i>
             </div>
-        {% endif %} -->
-
-            <h2><i class="fas fa-link"></i> URL Threat Detection</h2>
-<form id="urlForm" method="post" action="/url_predict" onsubmit="showSpinner('urlForm', 'urlSpinner')">
-    <label for="url">Enter URL:</label>
-    <input type="text" name="url" required>
-    <button type="submit"><i class="fas fa-search"></i> Classify</button>
-    <div id="urlSpinner" class="spinner"></div>
-</form>
-
-{% if url_result %}
-    <p><b>URL:</b> {{ url_entered }}</p>
-    <p><b>Prediction:</b> {{ url_result }}</p>
-{% endif %}
-
-
-
+            <h3>URL Threat Analysis</h3>
+            <p>Advanced URL scanning to detect phishing sites, malware distribution, and malicious redirects with real-time threat intelligence.</p>
+            <div class="card-features">
+                <span><i class="fas fa-check"></i> Phishing Detection</span>
+                <span><i class="fas fa-check"></i> Malware Scanning</span>
+                <span><i class="fas fa-check"></i> Real-time Analysis</span>
+            </div>
+            <a href="/url-detection" class="btn btn-primary">Start URL Analysis</a>
+        </div>
+        
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <h3>Email Security Scan</h3>
+            <p>AI-powered email analysis to identify spam, phishing attempts, and malicious content before they reach your inbox.</p>
+            <div class="card-features">
+                <span><i class="fas fa-check"></i> Spam Detection</span>
+                <span><i class="fas fa-check"></i> Phishing Protection</span>
+                <span><i class="fas fa-check"></i> Content Analysis</span>
+            </div>
+            <a href="/email-detection" class="btn btn-primary">Scan Email</a>
+        </div>
+        
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="fas fa-sms"></i>
+            </div>
+            <h3>SMS Threat Detection</h3>
+            <p>Intelligent SMS analysis to identify spam messages, smishing attacks, and fraudulent communications targeting mobile users.</p>
+            <div class="card-features">
+                <span><i class="fas fa-check"></i> Smishing Detection</span>
+                <span><i class="fas fa-check"></i> Fraud Prevention</span>
+                <span><i class="fas fa-check"></i> Mobile Security</span>
+            </div>
+            <a href="/sms-detection" class="btn btn-primary">Analyze SMS</a>
+        </div>
+        
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="fas fa-file-shield"></i>
+            </div>
+            <h3>Document Security</h3>
+            <p>Comprehensive file analysis for PDF and text documents to detect embedded threats and suspicious content.</p>
+            <div class="card-features">
+                <span><i class="fas fa-check"></i> Document Scanning</span>
+                <span><i class="fas fa-check"></i> Threat Detection</span>
+                <span><i class="fas fa-check"></i> Safe Analysis</span>
+            </div>
+            <a href="/file-analysis" class="btn btn-primary">Scan Document</a>
+        </div>
     </div>
+</div>
 
-</body>
-</html>
+<!-- Added security tips section -->
+<section class="security-tips">
+    <h2>Stay Protected with ThreatGuard</h2>
+    <div class="tips-grid">
+        <div class="tip-card">
+            <i class="fas fa-eye"></i>
+            <h4>Verify Before You Click</h4>
+            <p>Always verify suspicious links and emails before clicking. Use our URL analyzer for instant threat detection.</p>
+        </div>
+        <div class="tip-card">
+            <i class="fas fa-lock"></i>
+            <h4>Strong Authentication</h4>
+            <p>Use multi-factor authentication and strong, unique passwords for all your accounts.</p>
+        </div>
+        <div class="tip-card">
+            <i class="fas fa-shield-check"></i>
+            <h4>Regular Security Scans</h4>
+            <p>Regularly scan your communications and files for potential threats using our AI-powered tools.</p>
+        </div>
+        <div class="tip-card">
+            <i class="fas fa-user-shield"></i>
+            <h4>Stay Informed</h4>
+            <p>Keep up with the latest cybersecurity threats and best practices to protect yourself online.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

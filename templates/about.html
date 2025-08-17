@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - ThreatGuard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-info-circle"></i> About ThreatGuard</h1>
+    <p>Leading the fight against digital threats with advanced AI-powered security solutions</p>
+</div>
+
+<div style="background: var(--surface); padding: 3rem; border-radius: 1rem; margin: 2rem 0; border: 1px solid var(--border);">
+    <h2 style="color: var(--primary); margin-bottom: 2rem;">Our Mission</h2>
+    <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary);">
+        ThreatGuard is dedicated to protecting individuals and organizations from evolving cybersecurity threats. 
+        Our advanced AI-powered platform provides real-time analysis and detection of malicious URLs, spam emails, 
+        SMS scams, and file-based malware.
+    </p>
+    
+    <h2 style="color: var(--primary); margin: 2rem 0 1rem;">Why Choose ThreatGuard?</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin: 2rem 0;">
+        <div style="padding: 1.5rem; background: var(--background); border-radius: 0.5rem; border: 1px solid var(--border);">
+            <h3><i class="fas fa-brain" style="color: var(--primary);"></i> AI-Powered</h3>
+            <p>Advanced machine learning algorithms for accurate threat detection</p>
+        </div>
+        <div style="padding: 1.5rem; background: var(--background); border-radius: 0.5rem; border: 1px solid var(--border);">
+            <h3><i class="fas fa-clock" style="color: var(--primary);"></i> Real-Time</h3>
+            <p>Instant analysis and results for immediate protection</p>
+        </div>
+        <div style="padding: 1.5rem; background: var(--background); border-radius: 0.5rem; border: 1px solid var(--border);">
+            <h3><i class="fas fa-shield-alt" style="color: var(--primary);"></i> Comprehensive</h3>
+            <p>Multi-layered security covering all major threat vectors</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

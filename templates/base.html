@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ThreatGuard{% endblock %}</title>
+    <!-- Fixed CSS reference to use style.css instead of globals.css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Updated navigation to link to separate pages instead of sections -->
+    <nav class="header">
+        <div class="container">
+            <div class="nav">
+                <a href="/" class="logo"><i class="fas fa-shield-alt"></i> ThreatGuard</a>
+                <ul class="nav-links">
+                    <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="/url-detection"><i class="fas fa-link"></i> URL Detection</a></li>
+                    <li><a href="/email-detection"><i class="fas fa-envelope"></i> Email Security</a></li>
+                    <li><a href="/sms-detection"><i class="fas fa-sms"></i> SMS Detection</a></li>
+                    <li><a href="/file-analysis"><i class="fas fa-file"></i> File Analysis</a></li>
+                    <!-- Adding About and Contact links to navigation -->
+                    <li><a href="/about"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="/contact"><i class="fas fa-envelope"></i> Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Updated container structure for new theme -->
+    <div class="container">
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <!-- Redesigned chatbot with cleaner, more professional styling -->
+    <button class="chatbot-toggle" onclick="toggleChatbot()">
+        <i class="fas fa-comments"></i>
+    </button>
+    
+    <div id="chatbot-container" class="chatbot-container">
+        <div class="chatbot-header">
+            <h4><i class="fas fa-robot"></i> Security Assistant</h4>
+            <button onclick="toggleChatbot()" style="background: none; border: none; color: var(--text-primary); font-size: 18px; cursor: pointer;">×</button>
+        </div>
+        <div id="chatbot-messages" class="chatbot-messages">
+            <div class="message bot">
+                <i class="fas fa-shield-alt"></i> Hello! I'm your ThreatGuard security assistant. How can I help protect you today?
+            </div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatbot-input" placeholder="Ask about security threats..." onkeypress="handleChatbotKeyPress(event)">
+            <button onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Added footer section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4><i class="fas fa-shield-alt"></i> ThreatGuard</h4>
+                    <p>Advanced cybersecurity protection powered by AI. Safeguarding your digital presence with enterprise-grade threat detection.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Security Tools</h4>
+                    <ul>
+                        <li><a href="/url-detection">URL Threat Analysis</a></li>
+                        <li><a href="/email-detection">Email Security Scan</a></li>
+                        <li><a href="/sms-detection">SMS Threat Detection</a></li>
+                        <li><a href="/file-analysis">Document Security</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#security-tips">Security Tips</a></li>
+                        <li><a href="#threat-intelligence">Threat Intelligence</a></li>
+                        <li><a href="#best-practices">Best Practices</a></li>
+                        <li><a href="#support">Support Center</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-envelope"></i> security@threatguard.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ThreatGuard. All rights reserved. | <a href="#privacy">Privacy Policy</a> | <a href="#terms">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleChatbot() {
+            const container = document.getElementById('chatbot-container');
+            container.classList.toggle('active');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatbot-input');
+            const messages = document.getElementById('chatbot-messages');
+            
+            if (input.value.trim() === '') return;
+            
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user';
+            userMsg.innerHTML = `<i class="fas fa-user"></i> ${input.value}`;
+            messages.appendChild(userMsg);
+            
+            const userInput = input.value.toLowerCase();
+            input.value = '';
+            
+            // Enhanced bot responses with security focus
+            setTimeout(() => {
+                const botMsg = document.createElement('div');
+                botMsg.className = 'message bot';
+                
+                let response = '';
+                if (userInput.includes('help') || userInput.includes('what')) {
+                    response = '<i class="fas fa-info-circle"></i> I can help with URL threat analysis, email spam detection, SMS security scanning, and file analysis. What security concern can I assist with?';
+                } else if (userInput.includes('url') || userInput.includes('link')) {
+                    response = '<i class="fas fa-link"></i> Our URL scanner checks for phishing sites, malware, and suspicious redirects. Paste any URL to verify its safety instantly.';
+                } else if (userInput.includes('email')) {
+                    response = '<i class="fas fa-envelope"></i> Email security scanning identifies spam, phishing attempts, and malicious content. Enter the email details for comprehensive analysis.';
+                } else if (userInput.includes('sms') || userInput.includes('text')) {
+                    response = '<i class="fas fa-sms"></i> SMS threat detection identifies scam messages, smishing attacks, and fraudulent texts. Share the message content for verification.';
+                } else if (userInput.includes('file') || userInput.includes('document')) {
+                    response = '<i class="fas fa-file-shield"></i> Document analysis scans PDF and text files for malicious content and security threats. Upload files for detailed scanning.';
+                } else if (userInput.includes('safe') || userInput.includes('tips')) {
+                    response = '<i class="fas fa-shield-check"></i> Security tips: Verify suspicious links, avoid unknown attachments, use strong passwords, and always check sender authenticity.';
+                } else {
+                    response = '<i class="fas fa-robot"></i> I\'m here to help with cybersecurity questions. Ask me about URL scanning, email security, SMS threats, or file analysis!';
+                }
+                
+                botMsg.innerHTML = response;
+                messages.appendChild(botMsg);
+                messages.scrollTop = messages.scrollHeight;
+            }, 800);
+            
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function handleChatbotKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>

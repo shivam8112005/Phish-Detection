@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Email Spam Detection - ThreatGuard{% endblock %}
+
+{% block content %}
+<h2><i class="fas fa-envelope"></i> Email Spam Detection</h2>
+<p style="margin-bottom: 25px;">Paste your email content below to check for spam, phishing attempts, and malicious content.</p>
+
+<form method="post" action="/email_predict" onsubmit="showSpinner('emailForm', 'emailSpinner')">
+    <label for="email_subject"><strong>Email Subject:</strong></label>
+    <input type="text" name="email_subject" placeholder="Enter email subject line..." required>
+    
+    <label for="email_content"><strong>Email Content:</strong></label>
+    <textarea name="email_content" placeholder="Paste the full email content here..." required></textarea>
+    
+    <label for="sender_email"><strong>Sender Email (optional):</strong></label>
+    <input type="email" name="sender_email" placeholder="sender@example.com">
+    
+    <button type="submit"><i class="fas fa-search scan-icon"></i> Analyze Email</button>
+    <div id="emailSpinner" class="spinner"></div>
+</form>
+
+{% if email_result %}
+    <div class="result-box {{ email_result.lower() }}">
+        <h3>Analysis Result:</h3>
+        <p><strong>Subject:</strong> {{ email_subject }}</p>
+        <p><strong>Classification:</strong> {{ email_result }}</p>
+        <p><strong>Confidence:</strong> {{ email_confidence }}%</p>
+        {% if email_result.lower() == 'spam' %}
+            <p><i class="fas fa-exclamation-triangle"></i> <strong>Warning:</strong> This email appears to be spam. Be cautious of any links or attachments.</p>
+        {% elif email_result.lower() == 'phishing' %}
+            <p><i class="fas fa-skull-crossbones"></i> <strong>Danger:</strong> This email shows signs of phishing. Do not click any links or provide personal information.</p>
+        {% else %}
+            <p><i class="fas fa-check-circle"></i> This email appears to be legitimate.</p>
+        {% endif %}
+    </div>
+{% endif %}
+
+<div style="margin-top: 30px; padding: 20px; background: #161b22; border-radius: 8px;">
+    <h4><i class="fas fa-lightbulb"></i> Email Security Tips</h4>
+    <ul style="text-align: left; margin-left: 20px;">
+        <li>Always verify sender identity before clicking links</li>
+        <li>Check for spelling and grammar errors in suspicious emails</li>
+        <li>Hover over links to see the actual destination URL</li>
+        <li>Be wary of urgent requests for personal information</li>
+        <li>Use two-factor authentication when possible</li>
+    </ul>
+</div>
+{% endblock %}

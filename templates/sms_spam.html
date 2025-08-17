@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}SMS Spam Detection - ThreatGuard{% endblock %}
+
+{% block content %}
+<h2><i class="fas fa-sms"></i> SMS Spam Detection</h2>
+<p style="margin-bottom: 25px;">Enter your SMS message content to detect spam, scams, and fraudulent text messages.</p>
+
+<form method="post" action="/sms_predict" onsubmit="showSpinner('smsForm', 'smsSpinner')">
+    <label for="sms_content"><strong>SMS Message Content:</strong></label>
+    <textarea name="sms_content" placeholder="Enter the SMS message text here..." required style="height: 150px;"></textarea>
+    
+    <label for="sender_number"><strong>Sender Number (optional):</strong></label>
+    <input type="tel" name="sender_number" placeholder="+1234567890">
+    
+    <button type="submit"><i class="fas fa-search scan-icon"></i> Analyze SMS</button>
+    <div id="smsSpinner" class="spinner"></div>
+</form>
+
+{% if sms_result %}
+    <div class="result-box {{ sms_result.lower() }}">
+        <h3>Analysis Result:</h3>
+        <p><strong>Message:</strong> "{{ sms_content[:100] }}{% if sms_content|length > 100 %}...{% endif %}"</p>
+        <p><strong>Classification:</strong> {{ sms_result }}</p>
+        <p><strong>Risk Level:</strong> {{ sms_risk_level }}</p>
+        {% if sms_result.lower() == 'spam' %}
+            <p><i class="fas fa-exclamation-triangle"></i> <strong>Warning:</strong> This SMS appears to be spam. Avoid responding or clicking any links.</p>
+        {% elif sms_result.lower() == 'scam' %}
+            <p><i class="fas fa-skull-crossbones"></i> <strong>Danger:</strong> This SMS shows signs of a scam. Do not provide any personal information or money.</p>
+        {% else %}
+            <p><i class="fas fa-check-circle"></i> This SMS appears to be legitimate.</p>
+        {% endif %}
+    </div>
+{% endif %}
+
+<div style="margin-top: 30px; padding: 20px; background: #161b22; border-radius: 8px;">
+    <h4><i class="fas fa-shield-alt"></i> SMS Security Guidelines</h4>
+    <ul style="text-align: left; margin-left: 20px;">
+        <li>Never reply to suspicious text messages</li>
+        <li>Don't click on links from unknown senders</li>
+        <li>Be cautious of messages claiming urgent action required</li>
+        <li>Verify contest or prize notifications independently</li>
+        <li>Report spam messages to your carrier (forward to 7726)</li>
+        <li>Block numbers that send repeated spam messages</li>
+    </ul>
+</div>
+{% endblock %}

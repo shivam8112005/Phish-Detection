@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Email Security Scan - ThreatGuard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-envelope"></i> Email Security Scan</h1>
+    <p>AI-powered email analysis to identify spam, phishing attempts, and malicious content before they reach your inbox.</p>
+</div>
+
+<div class="detection-page">
+    <div class="main-card">
+        <div class="card-header">
+            <h3><i class="fas fa-envelope-open-text"></i> Analyze Email Security</h3>
+            <p>Enter email details to check for spam, phishing attempts, and malicious content.</p>
+        </div>
+        
+        <form method="POST" action="/email_predict" class="detection-form">
+            <div class="form-group">
+                <label for="sender"><i class="fas fa-user"></i> Sender Email</label>
+                <input type="email" id="sender" name="sender" class="form-control" placeholder="sender@example.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="subject"><i class="fas fa-heading"></i> Email Subject</label>
+                <input type="text" id="subject" name="subject" class="form-control" placeholder="Email subject line..." required>
+            </div>
+            
+            <div class="form-group">
+                <label for="content"><i class="fas fa-file-text"></i> Email Content</label>
+                <textarea id="content" name="content" class="form-control" rows="6" placeholder="Paste the email body content here..." required></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-large">
+                <i class="fas fa-envelope-open-text"></i> Scan Email Security
+            </button>
+        </form>
+        
+        {% if email_result %}
+        <div class="result-section">
+            <div class="result {{ 'safe' if email_result == 'Legitimate' else 'danger' }}">
+                <div class="result-header">
+                    <i class="fas fa-{{ 'check-circle' if email_result == 'Legitimate' else 'exclamation-triangle' }}"></i>
+                    <h4>Email Analysis Complete</h4>
+                </div>
+                <div class="result-content">
+                    <p><strong>Status:</strong> {{ email_result }}</p>
+                    {% if email_result == 'Legitimate' %}
+                    <p>This email appears to be legitimate based on our analysis.</p>
+                    {% else %}
+                    <p>⚠️ This email has been flagged as potentially spam or malicious. Exercise caution.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="info-sidebar">
+        <div class="info-card">
+            <h4><i class="fas fa-info-circle"></i> What We Check</h4>
+            <ul>
+                <li>Sender reputation and authenticity</li>
+                <li>Subject line spam indicators</li>
+                <li>Content analysis for phishing</li>
+                <li>Suspicious links and attachments</li>
+            </ul>
+        </div>
+        
+        <div class="info-card">
+            <h4><i class="fas fa-shield-alt"></i> Email Safety Tips</h4>
+            <ul>
+                <li>Verify sender before clicking links</li>
+                <li>Don't download unexpected attachments</li>
+                <li>Check for urgent or threatening language</li>
+                <li>Verify requests for personal information</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}URL Threat Detection - ThreatGuard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-link"></i> URL Threat Detection</h1>
+    <p>Advanced URL scanning to detect phishing sites, malware distribution, and malicious redirects with real-time threat intelligence.</p>
+</div>
+
+<div class="detection-page">
+    <div class="main-card">
+        <div class="card-header">
+            <h3><i class="fas fa-search"></i> Analyze URL Security</h3>
+            <p>Enter any URL to check for phishing attempts, malware, and other security threats.</p>
+        </div>
+        
+        <form method="POST" action="/url_predict" class="detection-form">
+            <div class="form-group">
+                <label for="url"><i class="fas fa-link"></i> URL to Analyze</label>
+                <input type="url" id="url" name="url" class="form-control" placeholder="https://example.com" required>
+                <small>Enter the complete URL including http:// or https://</small>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-large">
+                <i class="fas fa-search"></i> Analyze URL Security
+            </button>
+        </form>
+        
+        {% if url_result %}
+        <div class="result-section">
+            <div class="result {{ 'safe' if url_result == 'Legitimate' else 'danger' }}">
+                <div class="result-header">
+                    <i class="fas fa-{{ 'check-circle' if url_result == 'Legitimate' else 'exclamation-triangle' }}"></i>
+                    <h4>URL Analysis Complete</h4>
+                </div>
+                <div class="result-content">
+                    <p><strong>URL:</strong> {{ url_entered }}</p>
+                    <p><strong>Status:</strong> {{ url_result }}</p>
+                    {% if url_result == 'Legitimate' %}
+                    <p>This URL appears to be safe based on our analysis.</p>
+                    {% else %}
+                    <p>⚠️ This URL has been flagged as potentially dangerous. Avoid visiting this site.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="info-sidebar">
+        <div class="info-card">
+            <h4><i class="fas fa-info-circle"></i> What We Check</h4>
+            <ul>
+                <li>Domain reputation and age</li>
+                <li>SSL certificate validity</li>
+                <li>Known phishing patterns</li>
+                <li>Malware distribution history</li>
+            </ul>
+        </div>
+        
+        <div class="info-card">
+            <h4><i class="fas fa-shield-alt"></i> URL Safety Tips</h4>
+            <ul>
+                <li>Check URL spelling carefully</li>
+                <li>Look for HTTPS encryption</li>
+                <li>Avoid shortened URLs from unknown sources</li>
+                <li>Verify through official channels</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

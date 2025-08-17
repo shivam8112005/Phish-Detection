@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}File Analysis - ThreatGuard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-file-shield"></i> Document Security Analysis</h1>
+    <p>Comprehensive file analysis for PDF and text documents to detect embedded threats and suspicious content.</p>
+</div>
+
+<div class="detection-page">
+    <div class="main-card">
+        <div class="card-header">
+            <h3><i class="fas fa-upload"></i> Analyze Document Security</h3>
+            <p>Upload PDF or text files to scan for malicious content and security threats.</p>
+        </div>
+        
+        <form method="POST" action="/scam/" enctype="multipart/form-data" class="detection-form">
+            <div class="form-group">
+                <label for="file"><i class="fas fa-file"></i> Upload Document</label>
+                <input type="file" id="file" name="file" class="form-control" accept=".pdf,.txt" required>
+                <small>Supports PDF and TXT files (max 10MB)</small>
+            </div>
+            
+            <div class="file-info">
+                <div class="info-item">
+                    <i class="fas fa-file-pdf"></i>
+                    <span>PDF Documents</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Text Files</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-weight-hanging"></i>
+                    <span>Max 10MB</span>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-large">
+                <i class="fas fa-upload"></i> Scan Document
+            </button>
+        </form>
+        
+        {% if message %}
+        <div class="result-section">
+            <div class="result safe">
+                <div class="result-header">
+                    <i class="fas fa-info-circle"></i>
+                    <h4>Analysis Complete</h4>
+                </div>
+                <div class="result-content">
+                    <p>{{ message }}</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="info-sidebar">
+        <div class="info-card">
+            <h4><i class="fas fa-info-circle"></i> Document Threats We Detect</h4>
+            <ul>
+                <li>Embedded malicious scripts</li>
+                <li>Suspicious links and URLs</li>
+                <li>Hidden executable content</li>
+                <li>Phishing attempts in text</li>
+            </ul>
+        </div>
+        
+        <div class="info-card">
+            <h4><i class="fas fa-shield-alt"></i> File Safety Tips</h4>
+            <ul>
+                <li>Only open files from trusted sources</li>
+                <li>Scan downloads with antivirus</li>
+                <li>Be cautious of executable files</li>
+                <li>Keep software updated</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<style>
+.file-info {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: var(--surface-light);
+    border-radius: 8px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.info-item i {
+    color: var(--primary);
+}
+</style>
+{% endblock %}
