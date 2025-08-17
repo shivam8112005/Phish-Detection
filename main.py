@@ -117,6 +117,11 @@ import os
 import PyPDF2
 from dotenv import load_dotenv
 import pickle
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
+import string
+
 
 load_dotenv()
 
@@ -225,6 +230,29 @@ def email_predict():
             'content': content,
             'sender': sender
         })
+    
+
+def transform_text(text):
+    ps = PorterStemmer()
+    text = text.lower()
+    text = nltk.word_tokenize(text)
+    # print(text)
+    y=[]
+    for i in text:
+        if i.isalnum():
+            y.append(i)
+    text = y[:]
+    y.clear()
+
+    for i in text:
+        if i not in stopwords.words('english') and i not in string.punctuation:
+            y.append(i)
+    text = y[:]
+    y.clear()
+
+    for i in text:
+        y.append(ps.stem(i))
+    return " ".join(y).strip()
 
 @app.route("/sms_predict", methods=["POST"])
 def sms_predict():
@@ -232,8 +260,9 @@ def sms_predict():
         message = request.form["message"]
         
         # Predict using the SMS model
-        proba = sms_model.predict_proba([message])[0]
-        threshold = 0.5
+        transformed_text = transform_text(message)
+        proba = sms_model.predict_proba([transformed_text])[0]
+        threshold = 0.4
         prediction = 1 if proba[1] >= threshold else 0
         
         result = "Spam" if prediction == 1 else "Legitimate"
