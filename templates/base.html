@@ -4,38 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}CyberGuard{% endblock %}</title>
-    <!-- Fixed CSS reference to use style.css instead of globals.css -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" type="image/jpg" href="{% static 'css/phishdetection_logo.jpg' %}">
+
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <!-- Updated navigation to link to separate pages instead of sections -->
+    <!-- Navigation -->
     <nav class="header">
         <div class="container">
             <div class="nav">
-                <a href="/" class="logo"><i class="fas fa-shield-alt"></i> CyberGuard</a>
+                <a href="{% url 'main_app:home' %}" class="logo"><i class="fas fa-shield-alt"></i> CyberGuard</a>
+                <button class="hamburger" aria-label="Toggle navigation" onclick="toggleMobileNav()">
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                </button>
                 <ul class="nav-links">
-                    <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="/url-detection"><i class="fas fa-link"></i> URL Detection</a></li>
-                    <li><a href="/email-detection"><i class="fas fa-envelope"></i> Email Security</a></li>
-                    <li><a href="/sms-detection"><i class="fas fa-sms"></i> SMS Detection</a></li>
-                    <li><a href="/file-analysis"><i class="fas fa-file"></i> File Analysis</a></li>
-                    <!-- Adding About and Contact links to navigation -->
-                    <li><a href="/about"><i class="fas fa-info-circle"></i> About</a></li>
-                    <li><a href="/contact"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="{% url 'main_app:home' %}"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="{% url 'main_app:url_detection' %}"><i class="fas fa-link"></i> URL Detection</a></li>
+                    <li><a href="{% url 'main_app:email_detection' %}"><i class="fas fa-envelope"></i> Email Security</a></li>
+                    <li><a href="{% url 'main_app:sms_detection' %}"><i class="fas fa-sms"></i> SMS Detection</a></li>
+                    <li><a href="{% url 'main_app:file_analysis' %}"><i class="fas fa-file"></i> File Analysis</a></li>
+                    <li><a href="{% url 'main_app:about' %}"><i class="fas fa-info-circle"></i> About</a></li>
+                    <!-- <li><a href="{% url 'main_app:contact' %}"><i class="fas fa-envelope"></i> Contact</a></li> -->
+                    
+                    <!-- Authentication Links -->
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'user_auth:dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a href="{% url 'user_auth:profile' %}"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="{% url 'user_auth:logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'user_auth:login' %}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                        <li><a href="{% url 'user_auth:signup' %}"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
+        <div id="mobile-nav" class="mobile-nav" style="display:none;">
+            <ul>
+                <li><a href="{% url 'main_app:home' %}"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="{% url 'main_app:url_detection' %}"><i class="fas fa-link"></i> URL Detection</a></li>
+                <li><a href="{% url 'main_app:email_detection' %}"><i class="fas fa-envelope"></i> Email Security</a></li>
+                <li><a href="{% url 'main_app:sms_detection' %}"><i class="fas fa-sms"></i> SMS Detection</a></li>
+                <li><a href="{% url 'main_app:file_analysis' %}"><i class="fas fa-file"></i> File Analysis</a></li>
+                <li><a href="{% url 'main_app:about' %}"><i class="fas fa-info-circle"></i> About</a></li>
+                <!-- <li><a href="{% url 'main_app:contact' %}"><i class="fas fa-envelope"></i> Contact</a></li> -->
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'user_auth:dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="{% url 'user_auth:profile' %}"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="{% url 'user_auth:logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'user_auth:login' %}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                    <li><a href="{% url 'user_auth:signup' %}"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </div>
     </nav>
 
-    <!-- Updated container structure for new theme -->
+    <!-- Messages -->
+    {% if messages %}
+        <div class="container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Main Content -->
     <div class="container">
         <main class="main-content">
             {% block content %}{% endblock %}
         </main>
     </div>
 
-    <!-- Redesigned chatbot with cleaner, more professional styling -->
+    <!-- Chatbot -->
     <button class="chatbot-toggle" onclick="toggleChatbot()">
         <i class="fas fa-comments"></i>
     </button>
@@ -58,7 +104,7 @@
         </div>
     </div>
 
-    <!-- Added footer section -->
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -69,10 +115,10 @@
                 <div class="footer-section">
                     <h4>Security Tools</h4>
                     <ul>
-                        <li><a href="/url-detection">URL Threat Analysis</a></li>
-                        <li><a href="/email-detection">Email Security Scan</a></li>
-                        <li><a href="/sms-detection">SMS Threat Detection</a></li>
-                        <li><a href="/file-analysis">Document Security</a></li>
+                        <li><a href="{% url 'main_app:url_detection' %}">URL Threat Analysis</a></li>
+                        <li><a href="{% url 'main_app:email_detection' %}">Email Security Scan</a></li>
+                        <li><a href="{% url 'main_app:sms_detection' %}">SMS Threat Detection</a></li>
+                        <li><a href="{% url 'main_app:file_analysis' %}">Document Security</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -107,97 +153,88 @@
             container.classList.toggle('active');
         }
 
-        // function sendMessage() {
-        //     const input = document.getElementById('chatbot-input');
-        //     const messages = document.getElementById('chatbot-messages');
-            
-        //     if (input.value.trim() === '') return;
-            
-        //     // Add user message
-        //     const userMsg = document.createElement('div');
-        //     userMsg.className = 'message user';
-        //     userMsg.innerHTML = `<i class="fas fa-user"></i> ${input.value}`;
-        //     messages.appendChild(userMsg);
-            
-        //     const userInput = input.value.toLowerCase();
-        //     input.value = '';
-            
-        //     // Enhanced bot responses with security focus
-        //     setTimeout(() => {
-        //         const botMsg = document.createElement('div');
-        //         botMsg.className = 'message bot';
-                
-        //         let response = '';
-        //         if (userInput.includes('help') || userInput.includes('what')) {
-        //             response = '<i class="fas fa-info-circle"></i> I can help with URL threat analysis, email spam detection, SMS security scanning, and file analysis. What security concern can I assist with?';
-        //         } else if (userInput.includes('url') || userInput.includes('link')) {
-        //             response = '<i class="fas fa-link"></i> Our URL scanner checks for phishing sites, malware, and suspicious redirects. Paste any URL to verify its safety instantly.';
-        //         } else if (userInput.includes('email')) {
-        //             response = '<i class="fas fa-envelope"></i> Email security scanning identifies spam, phishing attempts, and malicious content. Enter the email details for comprehensive analysis.';
-        //         } else if (userInput.includes('sms') || userInput.includes('text')) {
-        //             response = '<i class="fas fa-sms"></i> SMS threat detection identifies scam messages, smishing attacks, and fraudulent texts. Share the message content for verification.';
-        //         } else if (userInput.includes('file') || userInput.includes('document')) {
-        //             response = '<i class="fas fa-file-shield"></i> Document analysis scans PDF and text files for malicious content and security threats. Upload files for detailed scanning.';
-        //         } else if (userInput.includes('safe') || userInput.includes('tips')) {
-        //             response = '<i class="fas fa-shield-check"></i> Security tips: Verify suspicious links, avoid unknown attachments, use strong passwords, and always check sender authenticity.';
-        //         } else {
-        //             response = '<i class="fas fa-robot"></i> I\'m here to help with cybersecurity questions. Ask me about URL scanning, email security, SMS threats, or file analysis!';
-        //         }
-                
-        //         botMsg.innerHTML = response;
-        //         messages.appendChild(botMsg);
-        //         messages.scrollTop = messages.scrollHeight;
-        //     }, 800);
-            
-        //     messages.scrollTop = messages.scrollHeight;
-        // }
-
-
-         async function sendMessage() {
-        const input = document.getElementById('chatbot-input');
-        const messages = document.getElementById('chatbot-messages');
-
-        if (input.value.trim() === '') return;
-
-        // Add user message
-        const userMsg = document.createElement('div');
-        userMsg.className = 'message user';
-        userMsg.innerHTML = `<i class="fas fa-user"></i> ${input.value}`;
-        messages.appendChild(userMsg);
-
-        const userInput = input.value;
-        input.value = '';
-
-        // Add loading indicator
-        const botMsg = document.createElement('div');
-        botMsg.className = 'message bot';
-        botMsg.innerHTML = '<i class="fas fa-robot"></i> Thinking...';
-        messages.appendChild(botMsg);
-        messages.scrollTop = messages.scrollHeight;
-
-        // Call Flask chatbot API
-        try {
-            const response = await fetch("/chatbot", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: userInput })
-            });
-
-            const data = await response.json();
-            botMsg.innerHTML = `<i class="fas fa-robot"></i> ${data.response}`;
-        } catch (error) {
-            botMsg.innerHTML = '<i class="fas fa-robot"></i> Sorry, I could not process your request.';
+        function toggleMobileNav() {
+            const mobile = document.getElementById('mobile-nav');
+            const btn = document.querySelector('.hamburger');
+            const isActive = mobile.classList.toggle('active');
+            btn.classList.toggle('active', isActive);
+            // Fallback in case CSS didn't load
+            mobile.style.display = isActive ? 'block' : 'none';
         }
 
-        messages.scrollTop = messages.scrollHeight;
-    }
+        // Close mobile nav when clicking a link
+        document.addEventListener('DOMContentLoaded', () => {
+            const links = document.querySelectorAll('#mobile-nav a');
+            links.forEach(link => link.addEventListener('click', () => {
+                const mobile = document.getElementById('mobile-nav');
+                const btn = document.querySelector('.hamburger');
+                mobile.classList.remove('active');
+                btn.classList.remove('active');
+                mobile.style.display = 'none';
+            }));
+        });
 
+        async function sendMessage() {
+            const input = document.getElementById('chatbot-input');
+            const messages = document.getElementById('chatbot-messages');
 
+            if (input.value.trim() === '') return;
+
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user';
+            userMsg.innerHTML = `<i class="fas fa-user"></i> ${input.value}`;
+            messages.appendChild(userMsg);
+
+            const userInput = input.value;
+            input.value = '';
+
+            // Add loading indicator
+            const botMsg = document.createElement('div');
+            botMsg.className = 'message bot';
+            botMsg.innerHTML = '<i class="fas fa-robot"></i> Thinking...';
+            messages.appendChild(botMsg);
+            messages.scrollTop = messages.scrollHeight;
+
+            // Call Django chatbot API
+            try {
+                const response = await fetch("{% url 'main_app:chatbot' %}", {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ message: userInput })
+                });
+
+                const data = await response.json();
+                botMsg.innerHTML = `<i class="fas fa-robot"></i> ${data.response}`;
+            } catch (error) {
+                botMsg.innerHTML = '<i class="fas fa-robot"></i> Sorry, I could not process your request.';
+            }
+
+            messages.scrollTop = messages.scrollHeight;
+        }
 
         function handleChatbotKeyPress(event) {
             if (event.key === 'Enter') {
                 sendMessage();
             }
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
         }
     </script>
 </body>

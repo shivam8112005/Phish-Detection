@@ -1,2 +1,3 @@
 /phish
 .env
+*.sqlite3

@@ -79,9 +79,12 @@ def detect_scam():
         extracted_text = file.read().decode('utf-8')
     else:
         return render_template('file_analysis.html', message='Error fetching the text! File is Empty or please Enter .pdf or .txt file only.')
-    
+    proba = email_model.predict_proba([extracted_text])[0]
+    threshold = 0.4
+    prediction = 1 if proba[1] >= threshold else 0
+    result = "Spam" if prediction == 1 else "Legitimate"
     print(extracted_text)
-    return render_template('file_analysis.html', message="File analyzed successfully!")
+    return render_template('file_analysis.html', message=result)
 
 @app.route("/url_predict", methods=["POST"])
 def url_predict():

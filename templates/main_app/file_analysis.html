@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Document Security Analysis - CyberGuard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-file-shield"></i> Document Security Analysis</h1>
+    <p>Analyze PDF and text documents for embedded threats and suspicious content using our AI-powered detection system.</p>
+</div>
+
+<div class="detection-page">
+    <div class="main-card">
+        <div class="card-header">
+            <h3><i class="fas fa-search"></i> Document Scanner</h3>
+            <p>Upload a PDF or text file below to analyze it for potential security threats. Our system will extract and examine the content for malicious patterns.</p>
+        </div>
+        
+        <div class="detection-form">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.file.label_tag }}
+                    {{ form.file }}
+                    {% if form.file.help_text %}
+                        <small class="form-text text-muted">{{ form.file.help_text }}</small>
+                    {% endif %}
+                    {% if form.file.errors %}
+                        <div class="error-message">
+                            {% for error in form.file.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Analyze Document
+                </button>
+            </form>
+        </div>
+
+        {% if message %}
+        <div class="result-section">
+            <div class="result {% if message == 'Spam' %}danger{% else %}safe{% endif %}">
+                <div class="result-header">
+                    <h4>
+                        {% if message == 'Spam' %}
+                            <i class="fas fa-exclamation-triangle"></i> Threat Detected
+                        {% else %}
+                            <i class="fas fa-check-circle"></i> Safe Document
+                        {% endif %}
+                    </h4>
+                </div>
+                <div class="result-content">
+                    <p><strong>Analysis Result:</strong> {{ message }}</p>
+                    {% if confidence %}
+                        <p><strong>Confidence:</strong> {{ confidence }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="info-sidebar">
+        <div class="info-card">
+            <h4><i class="fas fa-info-circle"></i> How It Works</h4>
+            <ul>
+                <li>Extracts text from PDF documents</li>
+                <li>Analyzes content for threats</li>
+                <li>Checks for malicious patterns</li>
+                <li>Identifies suspicious content</li>
+                <li>Provides security assessment</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h4><i class="fas fa-shield-alt"></i> Security Tips</h4>
+            <ul>
+                <li>Only open files from trusted sources</li>
+                <li>Scan documents before opening</li>
+                <li>Check file extensions carefully</li>
+                <li>Use our tool for suspicious files</li>
+                <li>Keep antivirus software updated</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h4><i class="fas fa-chart-line"></i> Supported Formats</h4>
+            <ul>
+                <li>PDF documents (.pdf)</li>
+                <li>Text files (.txt)</li>
+                <li>Maximum size: 10MB</li>
+                <li>Secure file processing</li>
+                <li>Privacy protection</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %} 
