@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CyberGuard{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" type="image/jpg" href="{% static 'css/phishdetection_logo.jpg' %}">
+
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="header">
+        <div class="container">
+            <div class="nav">
+                <a href="{% url 'main_app:home' %}" class="logo"><i class="fas fa-shield-alt"></i> CyberGuard</a>
+                <button class="hamburger" aria-label="Toggle navigation" onclick="toggleMobileNav()">
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="{% url 'main_app:home' %}"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="{% url 'main_app:url_detection' %}"><i class="fas fa-link"></i> URL Detection</a></li>
+                    <li><a href="{% url 'main_app:email_detection' %}"><i class="fas fa-envelope"></i> Email Security</a></li>
+                    <li><a href="{% url 'main_app:sms_detection' %}"><i class="fas fa-sms"></i> SMS Detection</a></li>
+                    <li><a href="{% url 'main_app:file_analysis' %}"><i class="fas fa-file"></i> File Analysis</a></li>
+                    <li><a href="{% url 'main_app:about' %}"><i class="fas fa-info-circle"></i> About</a></li>
+                    <!-- <li><a href="{% url 'main_app:contact' %}"><i class="fas fa-envelope"></i> Contact</a></li> -->
+                    
+                    <!-- Authentication Links -->
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'user_auth:dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a href="{% url 'user_auth:profile' %}"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="{% url 'user_auth:logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'user_auth:login' %}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                        <li><a href="{% url 'user_auth:signup' %}"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <div id="mobile-nav" class="mobile-nav" style="display:none;">
+            <ul>
+                <li><a href="{% url 'main_app:home' %}"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="{% url 'main_app:url_detection' %}"><i class="fas fa-link"></i> URL Detection</a></li>
+                <li><a href="{% url 'main_app:email_detection' %}"><i class="fas fa-envelope"></i> Email Security</a></li>
+                <li><a href="{% url 'main_app:sms_detection' %}"><i class="fas fa-sms"></i> SMS Detection</a></li>
+                <li><a href="{% url 'main_app:file_analysis' %}"><i class="fas fa-file"></i> File Analysis</a></li>
+                <li><a href="{% url 'main_app:about' %}"><i class="fas fa-info-circle"></i> About</a></li>
+                <!-- <li><a href="{% url 'main_app:contact' %}"><i class="fas fa-envelope"></i> Contact</a></li> -->
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'user_auth:dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="{% url 'user_auth:profile' %}"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="{% url 'user_auth:logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'user_auth:login' %}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                    <li><a href="{% url 'user_auth:signup' %}"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+        <div class="container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <div class="container">
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <!-- Chatbot -->
+    <button class="chatbot-toggle" onclick="toggleChatbot()">
+        <i class="fas fa-comments"></i>
+    </button>
+    
+    <div id="chatbot-container" class="chatbot-container">
+        <div class="chatbot-header">
+            <h4><i class="fas fa-robot"></i> Security Assistant</h4>
+            <button onclick="toggleChatbot()" style="background: none; border: none; color: var(--text-primary); font-size: 18px; cursor: pointer;">×</button>
+        </div>
+        <div id="chatbot-messages" class="chatbot-messages">
+            <div class="message bot">
+                <i class="fas fa-shield-alt"></i> Hello! I'm your CyberGuard security assistant. How can I help protect you today?
+            </div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatbot-input" placeholder="Ask about security threats..." onkeypress="handleChatbotKeyPress(event)">
+            <button onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4><i class="fas fa-shield-alt"></i> CyberGuard</h4>
+                    <p>Advanced cybersecurity protection powered by AI. Safeguarding your digital presence with enterprise-grade threat detection.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Security Tools</h4>
+                    <ul>
+                        <li><a href="{% url 'main_app:url_detection' %}">URL Threat Analysis</a></li>
+                        <li><a href="{% url 'main_app:email_detection' %}">Email Security Scan</a></li>
+                        <li><a href="{% url 'main_app:sms_detection' %}">SMS Threat Detection</a></li>
+                        <li><a href="{% url 'main_app:file_analysis' %}">Document Security</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#security-tips">Security Tips</a></li>
+                        <li><a href="#threat-intelligence">Threat Intelligence</a></li>
+                        <li><a href="#best-practices">Best Practices</a></li>
+                        <li><a href="#support">Support Center</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-envelope"></i> security@CyberGuard.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 CyberGuard. All rights reserved. | <a href="#privacy">Privacy Policy</a> | <a href="#terms">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleChatbot() {
+            const container = document.getElementById('chatbot-container');
+            container.classList.toggle('active');
+        }
+
+        function toggleMobileNav() {
+            const mobile = document.getElementById('mobile-nav');
+            const btn = document.querySelector('.hamburger');
+            const isActive = mobile.classList.toggle('active');
+            btn.classList.toggle('active', isActive);
+            // Fallback in case CSS didn't load
+            mobile.style.display = isActive ? 'block' : 'none';
+        }
+
+        // Close mobile nav when clicking a link
+        document.addEventListener('DOMContentLoaded', () => {
+            const links = document.querySelectorAll('#mobile-nav a');
+            links.forEach(link => link.addEventListener('click', () => {
+                const mobile = document.getElementById('mobile-nav');
+                const btn = document.querySelector('.hamburger');
+                mobile.classList.remove('active');
+                btn.classList.remove('active');
+                mobile.style.display = 'none';
+            }));
+        });
+
+        async function sendMessage() {
+            const input = document.getElementById('chatbot-input');
+            const messages = document.getElementById('chatbot-messages');
+
+            if (input.value.trim() === '') return;
+
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user';
+            userMsg.innerHTML = `<i class="fas fa-user"></i> ${input.value}`;
+            messages.appendChild(userMsg);
+
+            const userInput = input.value;
+            input.value = '';
+
+            // Add loading indicator
+            const botMsg = document.createElement('div');
+            botMsg.className = 'message bot';
+            botMsg.innerHTML = '<i class="fas fa-robot"></i> Thinking...';
+            messages.appendChild(botMsg);
+            messages.scrollTop = messages.scrollHeight;
+
+            // Call Django chatbot API
+            try {
+                const response = await fetch("{% url 'main_app:chatbot' %}", {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ message: userInput })
+                });
+
+                const data = await response.json();
+                botMsg.innerHTML = `<i class="fas fa-robot"></i> ${data.response}`;
+            } catch (error) {
+                botMsg.innerHTML = '<i class="fas fa-robot"></i> Sorry, I could not process your request.';
+            }
+
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function handleChatbotKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>

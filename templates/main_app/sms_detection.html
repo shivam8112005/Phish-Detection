@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}SMS Threat Detection - CyberGuard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-sms"></i> SMS Threat Detection</h1>
+    <p>Analyze SMS messages for spam, smishing attacks, and fraudulent communications using our AI-powered detection system.</p>
+</div>
+
+<div class="detection-page">
+    <div class="main-card">
+        <div class="card-header">
+            <h3><i class="fas fa-search"></i> SMS Scanner</h3>
+            <p>Enter an SMS message below to analyze it for potential security threats. Our system will check for spam indicators, smishing attempts, and suspicious content.</p>
+        </div>
+        
+        <div class="detection-form">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.message.label_tag }}
+                    {{ form.message }}
+                    {% if form.message.errors %}
+                        <div class="error-message">
+                            {% for error in form.message.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Analyze SMS
+                </button>
+            </form>
+        </div>
+
+        {% if sms_result %}
+        <div class="result-section">
+            <div class="result {% if sms_result == 'Spam' %}danger{% else %}safe{% endif %}">
+                <div class="result-header">
+                    <h4>
+                        {% if sms_result == 'Spam' %}
+                            <i class="fas fa-exclamation-triangle"></i> Spam Detected
+                        {% else %}
+                            <i class="fas fa-check-circle"></i> Legitimate SMS
+                        {% endif %}
+                    </h4>
+                </div>
+                <div class="result-content">
+                    <p><strong>Analysis Result:</strong> {{ sms_result }}</p>
+                    <p><strong>Message Preview:</strong> {{ sms_message|truncatechars:100 }}</p>
+                    {% if confidence %}
+                        <p><strong>Confidence:</strong> {{ confidence }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="info-sidebar">
+        <div class="info-card">
+            <h4><i class="fas fa-info-circle"></i> How It Works</h4>
+            <ul>
+                <li>Analyzes SMS content and patterns</li>
+                <li>Checks for spam indicators</li>
+                <li>Detects smishing attempts</li>
+                <li>Identifies fraudulent patterns</li>
+                <li>Examines message structure</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h4><i class="fas fa-shield-alt"></i> Security Tips</h4>
+            <ul>
+                <li>Never click links in suspicious SMS</li>
+                <li>Check sender numbers carefully</li>
+                <li>Look for urgent or threatening language</li>
+                <li>Verify unexpected requests</li>
+                <li>Use our tool for suspicious messages</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h4><i class="fas fa-chart-line"></i> Detection Features</h4>
+            <ul>
+                <li>Content analysis</li>
+                <li>Pattern recognition</li>
+                <li>Threat classification</li>
+                <li>Risk assessment</li>
+                <li>Real-time scanning</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %} 

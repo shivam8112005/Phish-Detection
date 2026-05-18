@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Email Security Scan - CyberGuard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-envelope"></i> Email Security Scan</h1>
+    <p>Analyze emails for spam, phishing attempts, and malicious content using our AI-powered detection system.</p>
+</div>
+
+<div class="detection-page">
+    <div class="main-card">
+        <div class="card-header">
+            <h3><i class="fas fa-search"></i> Email Scanner</h3>
+            <p>Enter email details below to analyze them for potential security threats. Our system will check for spam indicators, phishing attempts, and suspicious content.</p>
+        </div>
+        
+        <div class="detection-form">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.sender.label_tag }}
+                    {{ form.sender }}
+                    {% if form.sender.errors %}
+                        <div class="error-message">
+                            {% for error in form.sender.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.subject.label_tag }}
+                    {{ form.subject }}
+                    {% if form.subject.errors %}
+                        <div class="error-message">
+                            {% for error in form.subject.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.content.label_tag }}
+                    {{ form.content }}
+                    {% if form.content.errors %}
+                        <div class="error-message">
+                            {% for error in form.content.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Analyze Email
+                </button>
+            </form>
+        </div>
+
+        {% if email_result %}
+        <div class="result-section">
+            <div class="result {% if email_result == 'Spam' %}danger{% else %}safe{% endif %}">
+                <div class="result-header">
+                    <h4>
+                        {% if email_result == 'Spam' %}
+                            <i class="fas fa-exclamation-triangle"></i> Spam Detected
+                        {% else %}
+                            <i class="fas fa-check-circle"></i> Legitimate Email
+                        {% endif %}
+                    </h4>
+                </div>
+                <div class="result-content">
+                    <p><strong>Analysis Result:</strong> {{ email_result }}</p>
+                    {% if email_data %}
+                        <p><strong>Sender:</strong> {{ email_data.sender }}</p>
+                        <p><strong>Subject:</strong> {{ email_data.subject }}</p>
+                        <p><strong>Content Preview:</strong> {{ email_data.content|truncatechars:100 }}</p>
+                    {% endif %}
+                    {% if confidence %}
+                        <p><strong>Confidence:</strong> {{ confidence }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="info-sidebar">
+        <div class="info-card">
+            <h4><i class="fas fa-info-circle"></i> How It Works</h4>
+            <ul>
+                <li>Analyzes email content and structure</li>
+                <li>Checks for spam indicators</li>
+                <li>Detects phishing attempts</li>
+                <li>Identifies suspicious patterns</li>
+                <li>Examines sender reputation</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h4><i class="fas fa-shield-alt"></i> Security Tips</h4>
+            <ul>
+                <li>Never click suspicious links</li>
+                <li>Check sender email addresses carefully</li>
+                <li>Look for urgent or threatening language</li>
+                <li>Verify unexpected attachments</li>
+                <li>Use our tool for suspicious emails</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h4><i class="fas fa-chart-line"></i> Detection Features</h4>
+            <ul>
+                <li>Content analysis</li>
+                <li>Sender verification</li>
+                <li>Pattern recognition</li>
+                <li>Threat classification</li>
+                <li>Risk assessment</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %} 
