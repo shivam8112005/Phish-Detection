@@ -203,13 +203,6 @@ cyberguard_django/
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Support
-
-For support and questions:
-- Email: security@cyberguard.com
-- Documentation: Check the admin panel for detailed guides
-- Issues: Use the GitHub issues page
-
 ## Acknowledgments
 
 - Google Gemini AI for chatbot functionality
